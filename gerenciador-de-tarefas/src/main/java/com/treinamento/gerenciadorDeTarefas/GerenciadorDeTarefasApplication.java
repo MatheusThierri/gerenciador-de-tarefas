@@ -1,4 +1,4 @@
-package com.treinamento.gerenciadorDeTarefas.application;
+package com.treinamento.gerenciadorDeTarefas;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

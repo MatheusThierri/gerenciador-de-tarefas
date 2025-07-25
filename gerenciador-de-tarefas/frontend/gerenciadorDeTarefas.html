@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Tarefas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azure-dark: #0078d4;
+            --azure-primary: #50e6ff;
+            --azure-light: #e6f2fa;
+            --azure-bg: #f3f2f1;
+            --azure-text: #323130;
+            --azure-text-light: #605e5c;
+            --azure-border: #edebe9;
+            --azure-success: #107c10;
+            --azure-danger: #a80000;
+            --azure-white: #ffffff;
+            --border-radius: 2px;
+            --shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: var(--azure-bg);
+            color: var(--azure-text);
+            line-height: 1.5;
+            padding: 0;
+        }
+
+        .header {
+            background-color: var(--azure-white);
+            height: 48px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 1px solid var(--azure-border);
+            box-shadow: var(--shadow);
+        }
+
+        .header-title {
+            color: var(--azure-dark);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 48px);
+        }
+
+        .sidebar {
+            width: 210px;
+            background-color: var(--azure-white);
+            border-right: 1px solid var(--azure-border);
+            padding: 16px 0;
+        }
+
+        .sidebar-item {
+            padding: 8px 16px;
+            color: var(--azure-text);
+            cursor: pointer;
+        }
+
+        .sidebar-item.active {
+            background-color: var(--azure-light);
+            color: var(--azure-dark);
+            border-left: 2px solid var(--azure-dark);
+        }
+
+        .content {
+            flex: 1;
+            padding: 24px;
+        }
+
+        .card {
+            background-color: var(--azure-white);
+            border: 1px solid var(--azure-border);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            color: var(--azure-dark);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--azure-text-light);
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--azure-border);
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--azure-dark);
+            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--azure-dark);
+            color: var(--azure-white);
+        }
+
+        .btn-primary:hover {
+            background-color: #106ebe;
+        }
+
+        .btn-danger {
+            background-color: var(--azure-danger);
+            color: var(--azure-white);
+        }
+
+        .btn-danger:hover {
+            background-color: #8a0000;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            padding: 12px 16px;
+            border: 1px solid var(--azure-border);
+            border-radius: var(--border-radius);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .task-item:hover {
+            background-color: var(--azure-light);
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .empty-state {
+            color: var(--azure-text-light);
+            text-align: center;
+            padding: 24px;
+            font-style: italic;
+        }
+
+        .status-message {
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            margin-bottom: 16px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status-success {
+            background-color: rgba(16, 124, 16, 0.1);
+            color: var(--azure-success);
+            display: block;
+        }
+
+        .status-error {
+            background-color: rgba(168, 0, 0, 0.1);
+            color: var(--azure-danger);
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-title">Gerenciador de Tarefas</div>
+</div>
+
+<div class="main-container">
+    <div class="sidebar">
+        <div class="sidebar-item active">Tarefas</div>
+        <div class="sidebar-item">Configurações</div>
+        <div class="sidebar-item">Ajuda</div>
+    </div>
+
+    <div class="content">
+        <div id="statusMessage" class="status-message"></div>
+
+        <div class="card">
+            <h3 class="card-title">Adicionar Nova Tarefa</h3>
+            <div class="form-group">
+                <label for="descricao" class="form-label">Descrição da Tarefa</label>
+                <input type="text" id="descricao" class="form-control" placeholder="Digite a descrição da tarefa...">
+            </div>
+            <button class="btn btn-primary" onclick="adicionarTarefa()">Adicionar Tarefa</button>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">Minhas Tarefas</h3>
+            <ul id="listaTarefas" class="task-list">
+                <li class="empty-state">Carregando tarefas...</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = "http://localhost:8080/tarefas";
+    let statusTimeout;
+
+    function showStatusMessage(message, type) {
+        const statusElement = document.getElementById('statusMessage');
+        statusElement.textContent = message;
+        statusElement.className = 'status-message';
+        statusElement.classList.add(`status-${type}`);
+
+        clearTimeout(statusTimeout);
+        statusTimeout = setTimeout(() => {
+            statusElement.style.display = 'none';
+        }, 5000);
+    }
+
+    // Buscar e exibir as tarefas
+    function carregarTarefas() {
+        fetch(API_URL)
+            .then(response => response.json())
+            .then(data => {
+                let lista = document.getElementById("listaTarefas");
+
+                if (data.length === 0) {
+                    lista.innerHTML = '<li class="empty-state">Nenhuma tarefa encontrada. Adicione uma nova tarefa!</li>';
+                    return;
+                }
+
+                lista.innerHTML = "";
+                data.forEach(item => {
+                    let li = document.createElement("li");
+                    li.className = "task-item";
+                    li.innerHTML = `
+                            <span>${item.descricao}</span>
+                            <div class="task-actions">
+                                <button class="btn btn-danger" onclick="deletarTarefa(${item.id})">Excluir</button>
+                            </div>
+                        `;
+                    lista.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error("Erro ao carregar tarefas:", error);
+                document.getElementById("listaTarefas").innerHTML =
+                    '<li class="empty-state">Erro ao carregar tarefas. Tente novamente.</li>';
+                showStatusMessage('Erro ao carregar tarefas', 'error');
+            });
+    }
+
+    // Adicionar nova tarefa
+    function adicionarTarefa() {
+        let descricao = document.getElementById("descricao").value.trim();
+        if (!descricao) {
+            showStatusMessage('Por favor, digite uma descrição para a tarefa.', 'error');
+            return;
+        }
+
+        fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ descricao: descricao })
+        })
+            .then(response => {
+                if (!response.ok) throw new Error("Erro ao adicionar");
+                return response.json();
+            })
+            .then(() => {
+                document.getElementById("descricao").value = "";
+                showStatusMessage('Tarefa adicionada com sucesso!', 'success');
+                carregarTarefas();
+            })
+            .catch(error => {
+                console.error("Erro ao adicionar tarefa:", error);
+                showStatusMessage('Ocorreu um erro ao adicionar a tarefa.', 'error');
+            });
+    }
+
+    // Deletar tarefa por ID
+    function deletarTarefa(id) {
+        if (!confirm("Tem certeza que deseja excluir esta tarefa?")) {
+            return;
+        }
+
+        fetch(`${API_URL}/${id}`, { method: "DELETE" })
+            .then(response => {
+                if (!response.ok) throw new Error("Erro ao excluir");
+                showStatusMessage('Tarefa excluída com sucesso!', 'success');
+                carregarTarefas();
+            })
+            .catch(error => {
+                console.error("Erro ao excluir tarefa:", error);
+                showStatusMessage('Ocorreu um erro ao excluir a tarefa.', 'error');
+            });
+    }
+
+    // Carregar tarefas ao abrir a página
+    document.addEventListener('DOMContentLoaded', carregarTarefas);
+</script>
+
+</body>
+</html>

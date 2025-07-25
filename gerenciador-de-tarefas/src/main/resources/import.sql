@@ -1,0 +1,16 @@
+INSERT INTO tarefas(descricao) VALUES ('Jogar futebol');
+INSERT INTO tarefas(descricao) VALUES ('Jogar videogame');
+INSERT INTO tarefas(descricao) VALUES ('Estudar');
+INSERT INTO tarefas(descricao) VALUES ('Trabalhar');
+INSERT INTO tarefas(descricao) VALUES ('Jogar basquete');
+INSERT INTO tarefas(descricao) VALUES ('Dormir');
+INSERT INTO tarefas(descricao) VALUES ('Almoçar');
+INSERT INTO tarefas(descricao) VALUES ('Jantar');
+INSERT INTO tarefas(descricao) VALUES ('Tomar banho');
+INSERT INTO tarefas(descricao) VALUES ('Escovar os dentes');
+INSERT INTO tarefas(descricao) VALUES ('Viajar');
+INSERT INTO tarefas(descricao) VALUES ('Sair');
+INSERT INTO tarefas(descricao) VALUES ('Não beber refrigerante');
+INSERT INTO tarefas(descricao) VALUES ('Leitura');
+INSERT INTO tarefas(descricao) VALUES ('Estudar programação');
+INSERT INTO tarefas(descricao) VALUES ('Estudar inglês');
